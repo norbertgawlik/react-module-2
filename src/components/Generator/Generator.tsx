@@ -1,23 +1,34 @@
 import ReactDOM from 'react-dom/server';
-import { ChangeEvent, ReactNode, useState } from "react";
-import { Button, Text, Header } from "../../ui";
+import { ChangeEventHandler, ReactNode, useState, cloneElement, ReactElement} from "react";
+import { Button, Text, Header, Input } from "../../ui";
 
 type ComponentMap = {
     [key : string ] : ReactNode;
 };
 
-const componentsMap : ComponentMap = {
-    Button : <Button className="text-cyan-200 bg-cyan-700 border-cyan-200 hover:border-cyan-200" label="Click me!"/>,
-    Text : <Text className="text-sm">Lorem Ipsum</Text>,
-    Header : <Header className="text-3xl">Szkoła Reacta 2.0</Header>
-};
 
 export const Generator = () => {
     const [selectedOption,setSelectedOption] = useState<string>('');
-    const [selectedComponent,setSelectedComponent] = useState<ReactNode>(null);
+    const [selectedComponent,setSelectedComponent] = useState<ReactNode | null>(null);
+    const [textValue,setTextValue] = useState<string>('Lorem ipsum');
 
+    // TODO: idea
+    // const [selectedTextComponent,setSelectedTextComponent] = useState<ReactNode | null>(null);
+
+    const componentsMap : ComponentMap = {
+        Button : <Button className="text-cyan-200 bg-cyan-700 border-cyan-200 hover:border-cyan-200" label="Click me!"/>,
+        Text : <Text className="text-sm">{textValue}</Text>,
+        Header : <Header className="text-3xl">Szkoła Reacta 2.0</Header>
+    };
+
+    // TODO: idea
+    // const clonedTextComponent = cloneElement(componentsMap.Text as ReactElement<any>);
+    
     const handleCopy = async () : Promise<void> => {
-        const code = ReactDOM.renderToString(selectedComponent);
+        let code = ReactDOM.renderToString(selectedComponent);
+        if (selectedOption === 'Text') {
+            code = code.replace(/>.*</, `>${textValue}<`);
+        }
         try{
             await navigator.clipboard.writeText(code);
             alert('Copied to clipboard!');
@@ -26,16 +37,21 @@ export const Generator = () => {
         };
     };
 
-    const handleChange = (e : ChangeEvent<HTMLSelectElement>) => {
+    const handleSelectChange : ChangeEventHandler<HTMLSelectElement> = (e) => {
         const val = e.target.value;
         setSelectedOption(val);
         setSelectedComponent(componentsMap[val]);
     };
 
+    const handleInputChange : ChangeEventHandler<HTMLInputElement> = (e) => {
+        const val = e.target.value;
+        setTextValue(val);
+    };
+
     return(
         <>
             <div>
-                <select className="py-2 px-2 rounded" onChange={handleChange}>
+                <select className="py-2 px-2 rounded" onChange={handleSelectChange}>
                     <option value="">Select Component</option>
                     {Object.keys(componentsMap).map(e=>(
                         <option key={e} value={e}>{e}</option>
@@ -50,6 +66,14 @@ export const Generator = () => {
                     <Text className="text-sm text-gray-500">Preview:</Text>
                     <div>{selectedComponent}</div>
                 </div>
+
+                {selectedOption === "Text" ? 
+                    <div>
+                        <Text className="text-sm text-gray-500">Change text:</Text>
+                        <Input value={textValue} onChange={handleInputChange}/>
+                    </div> : null
+                }
+
                 <Button className="text-emerald-100 bg-emerald-600 border-emerald-500 hover:border-emerald-500" label="Copy code" onClick={handleCopy}></Button>
             </div> : null}
         </>
