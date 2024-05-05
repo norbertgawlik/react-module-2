@@ -5,7 +5,7 @@ type Props = {
     className? : string;
 };
 
-export const Text = ({children,className} : Props) => {
+export const Text = ({children, className} : Props) => {
     return(
         <p className={cn(className)}>{children}</p>
     );

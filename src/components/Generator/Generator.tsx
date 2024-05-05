@@ -1,29 +1,22 @@
 import ReactDOM from 'react-dom/server';
-import { ChangeEventHandler, ReactNode, useState, cloneElement, ReactElement} from "react";
+import { useState, cloneElement, type ReactNode, type ChangeEventHandler, type ReactElement} from "react";
 import { Button, Text, Header, Input } from "../../ui";
 
 type ComponentMap = {
     [key : string ] : ReactNode;
 };
 
-
 export const Generator = () => {
     const [selectedOption,setSelectedOption] = useState<string>('');
     const [selectedComponent,setSelectedComponent] = useState<ReactNode | null>(null);
     const [textValue,setTextValue] = useState<string>('Lorem ipsum');
 
-    // TODO: idea
-    // const [selectedTextComponent,setSelectedTextComponent] = useState<ReactNode | null>(null);
-
     const componentsMap : ComponentMap = {
         Button : <Button className="text-cyan-200 bg-cyan-700 border-cyan-200 hover:border-cyan-200" label="Click me!"/>,
-        Text : <Text className="text-sm">{textValue}</Text>,
+        Text : <Text className="text-sm text-red-200">{textValue}</Text>,
         Header : <Header className="text-3xl">Szkoła Reacta 2.0</Header>
     };
 
-    // TODO: idea
-    // const clonedTextComponent = cloneElement(componentsMap.Text as ReactElement<any>);
-    
     const handleCopy = async () : Promise<void> => {
         let code = ReactDOM.renderToString(selectedComponent);
         if (selectedOption === 'Text') {
@@ -34,7 +27,7 @@ export const Generator = () => {
             alert('Copied to clipboard!');
         }catch(e){
             console.log(e);
-        };
+        }
     };
 
     const handleSelectChange : ChangeEventHandler<HTMLSelectElement> = (e) => {
@@ -46,6 +39,9 @@ export const Generator = () => {
     const handleInputChange : ChangeEventHandler<HTMLInputElement> = (e) => {
         const val = e.target.value;
         setTextValue(val);
+
+        const clonedTextComponent = cloneElement(selectedComponent as ReactElement, { children: val });
+        setSelectedComponent(clonedTextComponent);
     };
 
     return(
