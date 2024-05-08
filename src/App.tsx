@@ -1,10 +1,10 @@
 import './App.css';
-import { Generator } from './components/Generator';
+import { FormWizard } from './components/FormWizard';
 
 function App() {
   return (
     <>
-      <Generator/>
+      <FormWizard/>
     </>
   )
 }

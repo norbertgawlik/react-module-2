@@ -65,8 +65,7 @@ export const Generator = () => {
 
                 {selectedOption === "Text" ? 
                     <div>
-                        <Text className="text-sm text-gray-500">Change text:</Text>
-                        <Input value={textValue} onChange={handleInputChange}/>
+                        <Input label="Change text" name="change" value={textValue} onChange={handleInputChange}/>
                     </div> : null
                 }
 

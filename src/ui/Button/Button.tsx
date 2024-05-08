@@ -6,14 +6,14 @@ type Props = {
     className? : string;
 } & ComponentProps<'button'>;
 
-export const Button = ({label, className, ...ref} : Props) => {
+export const Button = ({label, className, ...rep} : Props) => {
     return(
         <button
             className={cn(
                 "mt-2 mb-2 py-1.5 text-sm border transition ease-in hover:outline-none hover:opacity-85",
                 className
             )}
-            {...ref}>
+            {...rep}>
                 {label}
         </button>
     );
