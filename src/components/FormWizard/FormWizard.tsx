@@ -87,8 +87,7 @@ export const FormWizard = () => {
     };
 
     const checkField = (name : keyof FormData) => {
-        if(formData[name] == ""){
-            console.log('error');
+        if(formData[name] == "" || formData[name] == null){
             setValidateData(prev => ({
                 ...prev,
                 [name] : {
@@ -107,33 +106,40 @@ export const FormWizard = () => {
         }
     };
 
+    const handlePrevView: () => void = () => {
+        setActiveStep((prev) => prev - 1);
+    };
+
     return(
         <>
             <form>
                 {activeStep === 1 &&
-                <div className="step step1">
-                    <Input 
-                        name="firstname"
-                        label="Name"
-                        onChange={handleChange}
-                    />
-                    {validateData.firstname.error && 
-                        <p className="text-sm uppercase text-red-500">
-                            {validateData.firstname.errorTxt}
-                        </p>
-                    }
-                    <Input 
-                        name="surname"
-                        label="Surname"
-                        onChange={handleChange}
-                    />
-                    {validateData.surname.error && 
-                        <p className="text-sm uppercase text-red-500">
-                            {validateData.surname.errorTxt}
-                        </p>
-                    }
-                    <Button onClick={handleSubmit} label="Next"/>
-                </div>}
+                    <div className="step step1">
+                        <Input 
+                            name="firstname"
+                            label="Name"
+                            onChange={handleChange}
+                            value={formData.firstname}
+                        />
+                        {validateData.firstname.error && 
+                            <p className="text-sm uppercase text-red-500">
+                                {validateData.firstname.errorTxt}
+                            </p>
+                        }
+                        <Input 
+                            name="surname"
+                            label="Surname"
+                            onChange={handleChange}
+                            value={formData.surname}
+                        />
+                        {validateData.surname.error && 
+                            <p className="text-sm uppercase text-red-500">
+                                {validateData.surname.errorTxt}
+                            </p>
+                        }
+                        <Button onClick={handleSubmit} label="Next"/>
+                    </div>
+                }
                 {activeStep === 2 &&
                     <div className="step step2">
                         <DatePicker
@@ -147,12 +153,13 @@ export const FormWizard = () => {
 
                         {validateData.birthdate.error && 
                             <p className="text-sm uppercase text-red-500">
-                                {validateData.biirthday.errorTxt}
+                                {validateData.birthdate.errorTxt}
                             </p>
                         }
                         <Input 
                             name="hobby"
                             label="Hobby"
+                            value={formData.hobby}
                             onChange={handleChange}
                         />
                         {validateData.hobby.error && 
@@ -160,17 +167,21 @@ export const FormWizard = () => {
                                 {validateData.hobby.errorTxt}
                             </p>
                         }
+                        <Button onClick={handlePrevView} label="Prev"/>
                         <Button onClick={handleSubmit} label="Next"/>
-                    </div>}
-                    {activeStep === 3 &&
+                    </div>
+                }
+                {activeStep === 3 &&
                     <div className="step step3">
                         Summary:
                         <p>Name: {formData.firstname}</p>
                         <p>Surname: {formData.surname}</p>
                         <p>Birthday: {formData.birthdate?.toLocaleDateString().toString()}</p>
                         <p>Hobby: {formData.hobby}</p>
+                        <Button onClick={handlePrevView} label="Prev"/>
                         <Button onClick={handleSubmit} label="Send"/>
-                    </div>}
+                    </div>
+                }
             </form>
         </>
     )
