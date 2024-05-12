@@ -5,4 +5,4 @@ export const FormRememberSchema = z.object({
     time : z.string()
 });
 
-export type FormRememberDataHistory = z.infer<typeof FormRememberSchema>;
+export type FormRememberData = z.infer<typeof FormRememberSchema>;

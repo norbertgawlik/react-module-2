@@ -1,10 +1,10 @@
 import { ChangeEventHandler, useEffect, useState } from "react";
 import { Input } from "../../ui";
-import { FormRememberSchema, type FormRememberDataHistory } from "./types";
+import { FormRememberSchema, type FormRememberData } from "./types";
 import { z } from "zod";
 
 
-const autoFillInputSave = (key: keyof FormRememberDataHistory, value: FormRememberDataHistory) => {
+const autoFillInputSave = (key: keyof FormRememberData, value: FormRememberData) => {
     const date = new Date();
     const formatDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`
     const save = {
@@ -20,7 +20,7 @@ const autoFillInputLoad = (key:string) => {
 };
 
 export const FormRemember = () => {
-    const [inputVal,setInputValue] = useState<FormRememberDataHistory>({firstname:'',time:''});
+    const [inputVal,setInputValue] = useState<FormRememberData>({firstname:'',time:''});
     const [errorInput,setErrorInput] = useState<string | null>(null);
      
     const handleChange : ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -31,7 +31,7 @@ export const FormRemember = () => {
             try{
                 FormRememberSchema.parse(newState);
                 setErrorInput(null);
-                autoFillInputSave(id as keyof FormRememberDataHistory,newState);
+                autoFillInputSave(id as keyof FormRememberData,newState);
             }catch(error){
                 if(error instanceof z.ZodError){
                     setErrorInput(error.errors[0].message);
