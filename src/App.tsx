@@ -1,10 +1,10 @@
 import './App.css';
-import { FormWizard } from './components/FormWizard';
+import { FormRemember } from './components/FormRemember';
 
 function App() {
   return (
     <>
-      <FormWizard/>
+      <FormRemember/>
     </>
   )
 }
