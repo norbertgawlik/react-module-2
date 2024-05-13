@@ -1,10 +1,9 @@
 import './App.css';
-import { FormRemember } from './components/FormRemember';
-
+import { DynamicForm } from './components/DynamicForm';
 function App() {
   return (
     <>
-      <FormRemember/>
+      <DynamicForm/>
     </>
   )
 }
